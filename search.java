@@ -32,6 +32,74 @@ public class search extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
+
+		PrintWriter pw=response.getWriter();
+		String name=request.getParameter("user");
+		try {
+			String query="select * from products where NAME=?";
+			PreparedStatement ps;
+			ps=connection.getConnection().prepareStatement(query);
+			
+		ps.setString(1, name);
+			 ResultSet rs=ps.executeQuery();
+			 if(rs.next())
+	            {	 
+				
+				 
+		          String phonenumber=rs.getString(2);
+		          String address=rs.getString(3);
+		          String product=rs.getString(4);
+		          String quntity=rs.getString(5);
+		          String price=rs.getString(6);
+		          String total=rs.getString(7);
+			         
+		          
+		          
+		          RequestDispatcher rd=request.getRequestDispatcher("search.html");
+		         
+		          rd.include(request,response);
+		         
+		pw.print("<form action=\"update\" method=\"post\">"
+				+"	name<input type=\"text\" name=\"user\" value="+name+">	<br>"  	
+		
+		+ "phone number<input type=\"text\" name=\"ph\" value="+phonenumber+"> <br>");
+		
+ 
+		pw.print(" Address<input type=\"text\" name=\"add\" value="+address+"> <br>"
+		);
+		pw.print(" PRODUCT NAME<input type=\"text\" name=\"proname\" value="+product+"> <br>"
+				);
+		pw.print(" QUNTITY<input type=\"number\" name=\"qunt\" value="+quntity+"> <br>"
+				);
+		pw.print(" PRICE<input type=\"number\" name=\"price\" value="+price+"> <br>"
+				);
+		
+		
+	        
+		pw.print(" <input type=\"submit\" value=\"PLACE YOUR ORDER\"formaction=\"update\" method=\"post\">"
+				);   
+		  }
+		
+			 
+			 
+	 		 else
+	         {
+	        RequestDispatcher rd=request.getRequestDispatcher("register.html");
+		          rd.include(request,response);
+		         pw.print("<p style=text-align:center;color:red;>name doesnot exist</p>");
+	         }
+			}
+		
+			
+			catch(Exception ex)
+			{
+		      System.out.println(ex);
+			}
+	}
+
+
+
+}
 	}
 
 	/**
